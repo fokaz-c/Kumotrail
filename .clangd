@@ -1,0 +1,28 @@
+# .clangd configuration file for the KumoTrail project.
+#
+# This file tells the clangd language server how to compile the source code,
+# enabling features like autocompletion, error checking, and go-to-definition
+# in your code editor (e.g., VS Code, Vim, Emacs).
+
+CompileFlags:
+  # Add all the compiler flags from the Makefile here.
+  # These flags ensure that clangd understands the target architecture,
+  # include paths, and bare-metal environment.
+  Add:
+    # CRITICAL: Tell clangd the target architecture to prevent errors.
+    - --target=riscv32-unknown-elf
+
+    - -march=rv32imc
+    - -mabi=ilp32
+    - -nostdlib
+    - -ffreestanding
+    - -g
+    - -Wall
+    # Public include paths
+    - -Iinclude/KumoTrail
+    - -Idrivers/include
+    # Private include paths for drivers and kernel modules
+    - -Idrivers
+    - -Ikernel
+
+
