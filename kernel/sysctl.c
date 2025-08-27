@@ -2,8 +2,7 @@
  * @file sysctl.c
  * @brief Implementation of the system control module.
  */
-
-#include "systemctl.h"    // Public API for this module
+#include <sysctl.h>   // Public API for this module
 #include <stdint.h>    // For explicit integer types like uint32_t
 
 // --- Private Hardware Register Definitions ---

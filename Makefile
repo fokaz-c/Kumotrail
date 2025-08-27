@@ -1,28 +1,56 @@
 # KumoTrail Project Makefile
+# This file automates the build process for the KumoTrail OS.
+
+# -----------------------------------------------------------------------------
+# Architecture Configuration
+# -----------------------------------------------------------------------------
+ARCH ?= riscv
+
+# -----------------------------------------------------------------------------
+# Variables
+# -----------------------------------------------------------------------------
+
 TARGET = build/KumoTrail-Koro.elf
 TOOLCHAIN_PREFIX = riscv32-unknown-elf-
+
+# Toolchain executables
 CC = $(TOOLCHAIN_PREFIX)gcc
 AS = $(TOOLCHAIN_PREFIX)as
 LD = $(TOOLCHAIN_PREFIX)ld
 OBJCOPY = $(TOOLCHAIN_PREFIX)objcopy
-QEMU_XTENSA = tools/qemu/bin/qemu-system-xtensa
-QEMU_RISCV = tools/qemu/bin/qemu-system-riscv32
 
-# Compiler flags
-CFLAGS = -march=rv32imc -mabi=ilp32 -nostdlib -ffreestanding -g -Wall -I drivers/include
+# QEMU paths and command
+QEMU_RISCV = tools/qemu/bin/qemu-system-riscv32
+# CORRECTED: Changed -M esp32c3-builtin to -M esp32c3
+QEMU_CMD = -M esp32c3 -nographic -kernel $(TARGET)
+
+# -----------------------------------------------------------------------------
+# Compiler / Linker Flags
+# -----------------------------------------------------------------------------
+
+# C compiler flags.
+CFLAGS = -MMD -MP -march=rv32imc -mabi=ilp32 -nostdlib -ffreestanding -g -Wall
+CFLAGS += -I drivers/include
+CFLAGS += -I include/KumoTrail
+CFLAGS += -I arch/$(ARCH)/include/plat
+
+# Assembly flags
 ASFLAGS = -march=rv32imc -mabi=ilp32
+
+# Linker flags
 LDFLAGS = -T scripts/linker.ld
 
-# Source files
-ASM_SOURCES = arch/riscv/boot.S
-C_SOURCES = app/main.c \
-	drivers/uart.c
+# -----------------------------------------------------------------------------
+# Source Files
+# -----------------------------------------------------------------------------
 
-# Create build directory object paths
-OBJECTS = $(patsubst %.c,build/%.o,$(C_SOURCES)) $(patsubst %.S,build/%.o,$(ASM_SOURCES))
+# Update wildcard paths to search in the correct directories.
+C_SOURCES   = $(wildcard app/*.c drivers/*.c kernel/*.c arch/$(ARCH)/*.c)
+ASM_SOURCES = $(wildcard arch/$(ARCH)/*.S)
 
-# Ensure build directory exists
-$(shell mkdir -p build/app build/drivers build/arch/riscv)
+# Map source files to object files in the build directory
+OBJECTS     = $(patsubst %.c,build/%.o,$(C_SOURCES)) $(patsubst %.S,build/%.o,$(ASM_SOURCES))
+DEPS        = $(OBJECTS:.o=.d)
 
 # -----------------------------------------------------------------------------
 # Build Rules
@@ -50,21 +78,11 @@ build/%.o: %.S
 run: $(TARGET)
 	@echo "RUN $(TARGET) in ESP32-C3 QEMU"
 	@if [ -x "$(QEMU_RISCV)" ]; then \
-		$(QEMU_RISCV) -M esp32c3 -nographic -bios none -kernel $(TARGET); \
+		$(QEMU_RISCV) $(QEMU_CMD); \
 	elif command -v qemu-system-riscv32 >/dev/null 2>&1; then \
-		qemu-system-riscv32 -M esp32c3 -nographic -bios none -kernel $(TARGET); \
+		qemu-system-riscv32 $(QEMU_CMD); \
 	else \
-		echo "Error: ESP32 QEMU not found. Run './download_esp_qemu.sh' first"; \
-		exit 1; \
-	fi
-
-# Run in QEMU (ESP32 Xtensa) - if you need ESP32 classic support
-run-esp32: $(TARGET)
-	@echo "RUN $(TARGET) in ESP32 QEMU"
-	@if [ -x "$(QEMU_XTENSA)" ]; then \
-		$(QEMU_XTENSA) -M esp32 -nographic -kernel $(TARGET); \
-	else \
-		echo "Error: ESP32 QEMU not found. Run './download_esp_qemu.sh' first"; \
+		echo "Error: qemu-system-riscv32 not found."; \
 		exit 1; \
 	fi
 
@@ -72,11 +90,11 @@ run-esp32: $(TARGET)
 debug: $(TARGET)
 	@echo "RUN $(TARGET) in ESP32-C3 QEMU for debugging"
 	@if [ -x "$(QEMU_RISCV)" ]; then \
-		$(QEMU_RISCV) -M esp32c3 -nographic -kernel $(TARGET) -s -S; \
+		$(QEMU_RISCV) $(QEMU_CMD) -s -S; \
 	elif command -v qemu-system-riscv32 >/dev/null 2>&1; then \
-		qemu-system-riscv32 -M esp32c3 -nographic -kernel $(TARGET) -s -S; \
+		qemu-system-riscv32 $(QEMU_CMD) -s -S; \
 	else \
-		echo "Error: ESP32 QEMU not found. Run './download_esp_qemu.sh' first"; \
+		echo "Error: qemu-system-riscv32 not found."; \
 		exit 1; \
 	fi
 
@@ -85,4 +103,7 @@ clean:
 	@echo "CLEAN"
 	rm -rf build
 
-.PHONY: all run run-esp32 debug clean
+# Include generated dependency files
+-include $(DEPS)
+
+.PHONY: all run debug clean

@@ -1,28 +1,103 @@
-# .clangd configuration file for the KumoTrail project.
-#
-# This file tells the clangd language server how to compile the source code,
-# enabling features like autocompletion, error checking, and go-to-definition
-# in your code editor (e.g., VS Code, Vim, Emacs).
+# KumoTrail Project .clangd Configuration
+# Configures clangd for optimal IntelliSense support
 
 CompileFlags:
-  # Add all the compiler flags from the Makefile here.
-  # These flags ensure that clangd understands the target architecture,
-  # include paths, and bare-metal environment.
+  CompilationDatabase: build
   Add:
-    # CRITICAL: Tell clangd the target architecture to prevent errors.
-    - --target=riscv32-unknown-elf
+    -march=rv32imc
+    -mabi=ilp32
+    -nostdlib
+    -ffreestanding
+    -fno-builtin
+    -fno-stack-protector
+    -fno-stack-check
+    -fno-unwind-tables
+    -fno-asynchronous-unwind-tables
+    -g
+    -Wall
+    -Wextra
+    -Werror=implicit-function-declaration
+    -I.
+    -Idrivers/include
+    -Iinclude
+    -Iinclude/KumoTrail
+    -Iinclude/arch
+    -Iinclude/arch/riscv
+    -Ilib/include
+    -D__riscv
+    -D__riscv_xlen=32
+    -D__riscv_float_abi_soft
+    -D__riscv_mul=1
+    -D__riscv_div=1
+    -D__riscv_atomic=1
+    -D__riscv_compressed=1
+    -DESP32C3
+    -DCONFIG_IDF_TARGET_ESP32C3
+    -DCONFIG_IDF_TARGET_ARCH_RISCV
+    -D__STDC_VERSION__=201112L
+    -D__STDC_HOSTED__=0
+    -D__STDC__=1
+    -D__STDC_NO_VLA__=1
+    -D__STDC_NO_COMPLEX__=1
+    -D__STDC_NO_ATOMICS__=1
+    -D__STDC_NO_THREADS__=1
 
-    - -march=rv32imc
-    - -mabi=ilp32
-    - -nostdlib
-    - -ffreestanding
-    - -g
-    - -Wall
-    # Public include paths
-    - -Iinclude/KumoTrail
-    - -Idrivers/include
-    # Private include paths for drivers and kernel modules
-    - -Idrivers
-    - -Ikernel
+Index:
+  Background: Build
+  External:
+    Dir: build
+    Dir: .git
+    Dir: temp
+    Dir: tools
 
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+  Designators: Yes
 
+Completion:
+  EnableSnippets: Yes
+  EnableIndex: Yes
+
+Diagnostics:
+  UnusedIncludes: Strict
+  ClangTidy:
+    Add:
+      - modernize-*
+      - performance-*
+      - readability-*
+      - bugprone-*
+      - cppcoreguidelines-*
+    Remove:
+      - modernize-use-trailing-return-type
+      - modernize-avoid-c-arrays
+      - modernize-use-using
+      - modernize-use-nullptr
+      - modernize-use-override
+      - modernize-use-default-member-init
+      - modernize-use-equals-default
+      - modernize-use-equals-delete
+      - modernize-use-auto
+      - modernize-use-emplace
+      - modernize-use-transparent-functors
+      - modernize-use-uncaught-exceptions
+      - modernize-use-nodiscard
+      - modernize-use-constinit
+      - modernize-use-constexpr
+      - modernize-use-std-array
+      - modernize-use-std-string_view
+      - modernize-use-std-optional
+      - modernize-use-std-variant
+      - modernize-use-std-any
+      - modernize-use-std-filesystem
+      - modernize-use-std-string_literals
+      - modernize-use-std-chrono
+      - modernize-use-std-regex
+      - modernize-use-std-thread
+      - modernize-use-std-mutex
+      - modernize-use-std-atomic
+      - modernize-use-std-future
+      - modernize-use-std-promise
+      - modernize-use-std-async
+      - modernize-use-std-system_error
