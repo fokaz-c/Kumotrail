@@ -34,3 +34,4 @@ KumoTrail.elf
 build/
 temp/
 *.log
+compile_commands.json
