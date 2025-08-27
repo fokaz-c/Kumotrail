@@ -1,7 +1,7 @@
 # Kumotrail ☁️
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/fokaz-c/Kumotrail)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![RISC-V](https://img.shields.io/badge/arch-RISC--V-orange)](https://riscv.org/)
 [![ESP32-C3](https://img.shields.io/badge/target-ESP32--C3-red)](https://www.espressif.com/en/products/socs/esp32-c3)
 
@@ -11,7 +11,7 @@
 
 ## 📖 Introduction
 
-**Kumotrail** (a wordplay combining the Japanese kumo, 雲, meaning cloud, with "contrail") is an educational project to build a complete, bare-metal operating system for a smart desk clock. The system runs on an ESP32-C3 (RISC-V) and is developed entirely from the ground up, without relying on any vendor SDKs, HALs, or existing real-time operating systems.
+**Kumotrail** (a wordplay combining the Japanese *kumo*, 雲, meaning cloud, with "contrail") is an educational project to build a complete, bare-metal operating system for a smart desk clock. The system runs on an ESP32-C3 (RISC-V) and is developed entirely from the ground up, without relying on any vendor SDKs, HALs, or existing real-time operating systems.
 
 The primary goal of this project is to explore and learn the fundamentals of operating system design, low-level driver development, and embedded systems programming.
 
@@ -62,8 +62,8 @@ To build and run KumoTrail, you will need the following tools:
 ### 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/fokaz-c/Kumotrail.git
-cd Kumotrail
+git clone https://github.com/yourusername/kumotrail.git
+cd kumotrail
 ```
 
 ### 2. **Build the kernel:**
@@ -134,7 +134,7 @@ We welcome contributions! Please see our contributing guidelines for details.
 
 ## 📄 License
 
-This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+This project is licensed under the Apache License 2.0 - see the `LICENSE` file for details.
 
 ---
 
