@@ -1,6 +1,6 @@
 # Kumotrail ☁️
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/fokaz-c/Kumotrail)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/fokaz-c-c/Kumotrail)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 [![RISC-V](https://img.shields.io/badge/arch-RISC--V-orange)](https://riscv.org/)
 [![ESP32-C3](https://img.shields.io/badge/target-ESP32--C3-red)](https://www.espressif.com/en/products/socs/esp32-c3)

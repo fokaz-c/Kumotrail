@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Fokaz
+ * Copyright 2025 fokaz-c
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@
  *
  * @version 1.0
  * @date 2025
- * @author Fokaz
+ * @author fokaz-c
  * 
  * @changelog
- * Version 1.0 - 23-08-2025 - Fokaz
+ * Version 1.0 - 23-08-2025 - fokaz-c
  *   - Initial creation of ESP32-C3 linker script
  *   - Implemented unified memory layout for bare-metal execution
  *   - Added comprehensive documentation and comments

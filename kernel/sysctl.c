@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Fokaz
+ * Copyright 2025 fokaz-c
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  * @brief Implementation of the system control module.
  * @version 1.0
  * @date 28-08-2025
- * @author/maintainer Fokaz
+ * @author/maintainer fokaz-c
  */
 #include <sysctl.h>   // Public API for this module
 #include <stdint.h>    // For explicit integer types like uint32_t

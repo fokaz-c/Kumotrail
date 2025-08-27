@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Fokaz
+ * Copyright 2025 fokaz-c
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@
  *
  * @version 1.0
  * @date 28-08-2025
- * @author Fokaz
- * @maintainer Fokaz
+ * @author fokaz-c
+ * @maintainer fokaz-c
  *
  * @note This module is essential for the proper functioning of all drivers
  * that interact with hardware peripherals.

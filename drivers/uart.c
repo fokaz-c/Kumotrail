@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Fokaz
+ * Copyright 2025 fokaz-c
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  * @file uart.c
  * @brief Bare-metal UART0 driver for ESP32-C3 (KumoTrail kernel)
  *
- * Version: 1.3 | Date: 24-08-2025 | Author/Maintainer: Fokaz
+ * Version: 1.3 | Date: 24-08-2025 | Author/Maintainer: fokaz-c
  */
 
 #include "uart.h"
