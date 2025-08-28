@@ -16,34 +16,47 @@
 
 /**
  * @file main.c
- * @brief Main entry point for the KumoTrail koro kernel.
- *
- * This file contains the primary C function that is called after the
- * initial assembly boot sequence. It is responsible for initializing
- * hardware drivers and starting the main application loop.
+ * @brief Main entry point for the KumoTrail kernel.
  */
 
-#include "uart.h" // Include the public API for our UART driver
+#include "uart.h"
+#include "timer.h"
+#include "trap.h"
+#include "sysctl.h"
+
+/**
+ * @brief The kernel's tick handler.
+ *
+ * This function is registered as a callback and is executed by the timer
+ * driver on every timer interrupt.
+ */
+void kernel_tick_handler(void)
+{
+    uart_puts("Tick!\n");
+}
 
 /**
  * @brief The main function of the KumoTrail OS.
- *
- * This function is called from the assembly startup code in boot.S.
- * It should never return.
  */
 void main(void)
 {
-    // Initialize the UART driver so we can print messages.
+    // Initialize all hardware drivers and kernel modules
     uart_init();
+    timer_init();
+    trap_init();
 
-    // Send a "hello world" message from the kernel.
-    uart_puts("hello world from kernel\n");
+    // Register our tick handler function with the timer driver.
+    timer_set_callback(kernel_tick_handler);
 
-    uart_puts("KumoTrail koro kernel initialized\n");
+    // Enable interrupts globally. The system is now live.
+    enable_interrupts();
 
-    // Main should never return in a bare-metal environment.
-    // We enter an infinite loop to halt the CPU.
-    while (1) {
-        // Future kernel tasks will be managed here.
+    uart_puts("KumoTrail has booted. Interrupts are enabled.\n");
+
+    // The CPU will now idle here. The timer interrupt will periodically
+    // call our handler and print "Tick!".
+    while (1)
+    {
+        // This is the idle loop.
     }
 }

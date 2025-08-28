@@ -21,7 +21,6 @@ OBJCOPY = $(TOOLCHAIN_PREFIX)objcopy
 
 # QEMU paths and command
 QEMU_RISCV = tools/qemu/bin/qemu-system-riscv32
-# CORRECTED: Changed -M esp32c3-builtin to -M esp32c3
 QEMU_CMD = -M esp32c3 -nographic -kernel $(TARGET)
 
 # -----------------------------------------------------------------------------
@@ -29,13 +28,14 @@ QEMU_CMD = -M esp32c3 -nographic -kernel $(TARGET)
 # -----------------------------------------------------------------------------
 
 # C compiler flags.
-CFLAGS = -MMD -MP -march=rv32imc -mabi=ilp32 -nostdlib -ffreestanding -g -Wall
+# CRITICAL FIX: Added _zicsr to enable CSR instructions.
+CFLAGS = -MMD -MP -march=rv32imc_zicsr -mabi=ilp32 -nostdlib -ffreestanding -g -Wall
 CFLAGS += -I drivers/include
 CFLAGS += -I include/KumoTrail
 CFLAGS += -I arch/$(ARCH)/include/plat
 
 # Assembly flags
-ASFLAGS = -march=rv32imc -mabi=ilp32
+ASFLAGS = -march=rv32imc_zicsr -mabi=ilp32
 
 # Linker flags
 LDFLAGS = -T scripts/linker.ld
@@ -44,7 +44,7 @@ LDFLAGS = -T scripts/linker.ld
 # Source Files
 # -----------------------------------------------------------------------------
 
-# Update wildcard paths to search in the correct directories.
+# Automatically find all source files in the correct directories.
 C_SOURCES   = $(wildcard app/*.c drivers/*.c kernel/*.c arch/$(ARCH)/*.c)
 ASM_SOURCES = $(wildcard arch/$(ARCH)/*.S)
 

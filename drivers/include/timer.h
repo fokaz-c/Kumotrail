@@ -17,16 +17,30 @@
 /*
 * @file - timer.h
 * @purpose - public api for the timer driver
+* @version 1.0
+* @date 29-08-2025
+* @author fokaz-c
 */
 #ifndef TIMER_H
 #define TIMER_H
 
 /*
-* @brief - This function will initialize the peripheral to use the TIMER GROUP (TIMG)
+* @brief This function will initialize the peripheral to use the TIMER GROUP (TIMG)
 * for an interrupt signal generation. 
 *
 */
 void timer_init(void);
+
+/**
+ * @brief Handles timer interrupts.
+ */
+void timer_handle_interrupt(void);
+
+/**
+ * @brief Sets a callback function to be executed on each timer tick.
+ * @param callback The function pointer to the callback.
+ */
+void timer_set_callback(void (*callback)(void));
 
 
 #endif
