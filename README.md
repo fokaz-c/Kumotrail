@@ -33,12 +33,12 @@ The primary goal of this project is to explore and learn the fundamentals of ope
 - [x] UART driver - Debug output and communication
 - [x] Basic build system - Makefile with cross-compilation
 
-### **Phase 2: Kernel Core** - 🚧 **In Progress**
-- [ ] Timer interrupts - System tick generation
-- [ ] Trap handling - Exception and interrupt management
-- [ ] Task scheduler - Preemptive multitasking
+### **Phase 2: Kernel Core** - ✅**Complete**
+- [x] Timer interrupts - System tick generation
+- [x] Trap handling - Exception and interrupt management
+- [x] Task scheduler - Preemptive multitasking
 
-### **Phase 3: System Services & Application** - 📋 **Planned**
+### **Phase 3: System Services & Application** - 🚧 **In progress**
 - [ ] GPIO, I2C/SPI, WiFi, and Display drivers
 - [ ] Real-Time Clock, Weather API integration, and UI
 
