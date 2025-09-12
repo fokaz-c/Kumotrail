@@ -1,6 +1,6 @@
 /**
- * @file trap.c
- * @brief C-level trap and interrupt handling for the KumoTrail kernel.
+ * @file trap.c - FIXED VERSION
+ * @brief C-level trap and interrupt handling that properly handles mepc for task switching
  */
 #include "trap.h"
 #include "timer.h"
@@ -12,6 +12,7 @@
 #define CSR_MSTATUS 0x300
 #define CSR_MTVEC 0x305
 #define CSR_MCAUSE 0x342
+#define CSR_MEPC 0x341
 #define MSTATUS_MIE_BIT (1U << 3)
 
 // --- Forward declaration of the assembly trap handler ---
@@ -26,6 +27,9 @@ extern void _trap_handler(void);
     asm volatile("csrr %0, " #csr : "=r"(val)); \
     val; \
 })
+
+// Flag to track if this is the first task switch
+static int first_task_switch = 1;
 
 void trap_init(void)
 {
@@ -44,11 +48,13 @@ void enable_interrupts(void)
  * @param sp The stack pointer of the interrupted task.
  * @return The stack pointer of the next task to run.
  */
+static int need_mepc_update = 0;
+static uint32_t new_mepc_value = 0;
+
 uint32_t *trap_handler_c(uint32_t *sp)
 {
     uint32_t cause = read_csr(mcause);
     
-    // Check if the trap was caused by an interrupt (MSB is set).
     if (cause & 0x80000000)
     {
         uint32_t interrupt_id = cause & 0x7FFFFFFF;
@@ -56,27 +62,26 @@ uint32_t *trap_handler_c(uint32_t *sp)
         {
             case 6: // Timer interrupt
                 timer_handle_interrupt();
-                //uart_puts("Tick\n"); // Debug output
-                return schedule(sp); // Call the scheduler
+                
+                uint32_t *new_sp = schedule(sp);
+                
+                // Always set mepc when switching tasks (safe approach)
+                if (new_sp != sp) {
+                    uint32_t task_entry = *new_sp;
+                    write_csr(mepc, task_entry);
+                }
+                
+                return new_sp;
                 
             default:
-                uart_puts("Unknown interrupt: ");
-                // Could print the interrupt ID here
-                uart_puts("\n");
+                uart_puts("Unknown interrupt\n");
                 break;
         }
     }
     else
     {
-        // Handle synchronous exceptions
-        uart_puts("Exception occurred: ");
-        // Could print the cause here
-        uart_puts("\n");
-        
-        // For now, just return to the same task
-        // In a real OS, you'd handle page faults, illegal instructions, etc.
+        uart_puts("Exception occurred\n");
     }
     
-    // If it wasn't handled, return the same stack pointer
     return sp;
 }
