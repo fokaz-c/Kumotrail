@@ -1,109 +1,74 @@
 /*
- * Copyright 2025 fokaz-c
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
  * @file trap.S
  * @brief RISC-V assembly trap handler for the KumoTrail kernel.
- * @author fokaz-c
- *
- * This file contains the low-level entry point for all exceptions and
- * interrupts. It is responsible for saving and restoring the CPU context
- * before and after calling the C-level handler.
  */
 
-/*
- * @macro save_all_registers
- * @brief Saves all general-purpose registers (except x0 and sp) to the stack.
- *
- * This macro allocates 120 bytes on the stack and then stores the 30
- * general-purpose registers. This preserves the context of the interrupted program.
- */
 .macro save_all_registers
-    addi sp, sp, -120
-    sw ra, 0(sp)
-    sw gp, 4(sp)
-    sw tp, 8(sp)
-    sw t0, 12(sp)
-    sw t1, 16(sp)
-    sw t2, 20(sp)
-    sw s0, 24(sp)
-    sw s1, 28(sp)
-    sw a0, 32(sp)
-    sw a1, 36(sp)
-    sw a2, 40(sp)
-    sw a3, 44(sp)
-    sw a4, 48(sp)
-    sw a5, 52(sp)
-    sw a6, 56(sp)
-    sw a7, 60(sp)
-    sw s2, 64(sp)
-    sw s3, 68(sp)
-    sw s4, 72(sp)
-    sw s5, 76(sp)
-    sw s6, 80(sp)
-    sw s7, 84(sp)
-    sw s8, 88(sp)
-    sw s9, 92(sp)
-    sw s10, 96(sp)
-    sw s11, 100(sp)
-    sw t3, 104(sp)
-    sw t4, 108(sp)
-    sw t5, 112(sp)
-    sw t6, 116(sp)
+    addi sp, sp, -124
+    sw ra, 0(sp)   # x1
+    sw gp, 8(sp)   # x3
+    sw tp, 12(sp)  # x4
+    sw t0, 16(sp)  # x5
+    sw t1, 20(sp)  # x6
+    sw t2, 24(sp)  # x7
+    sw s0, 28(sp)  # x8
+    sw s1, 32(sp)  # x9
+    sw a0, 36(sp)  # x10
+    sw a1, 40(sp)  # x11
+    sw a2, 44(sp)  # x12
+    sw a3, 48(sp)  # x13
+    sw a4, 52(sp)  # x14
+    sw a5, 56(sp)  # x15
+    sw a6, 60(sp)  # x16
+    sw a7, 64(sp)  # x17
+    sw s2, 68(sp)  # x18
+    sw s3, 72(sp)  # x19
+    sw s4, 76(sp)  # x20
+    sw s5, 80(sp)  # x21
+    sw s6, 84(sp)  # x22
+    sw s7, 88(sp)  # x23
+    sw s8, 92(sp)  # x24
+    sw s9, 96(sp)  # x25
+    sw s10, 100(sp) # x26
+    sw s11, 104(sp) # x27
+    sw t3, 108(sp) # x28
+    sw t4, 112(sp) # x29
+    sw t5, 116(sp) # x30
+    sw t6, 120(sp) # x31
 .endm
 
-/*
- * @macro restore_all_registers
- * @brief Restores all general-purpose registers from the stack.
- *
- * This macro is the exact inverse of 'save_all_registers'. It loads
- * the saved values from the stack back into the CPU registers before
- * deallocating the stack frame.
- */
 .macro restore_all_registers
-    lw ra, 0(sp)
-    lw gp, 4(sp)
-    lw tp, 8(sp)
-    lw t0, 12(sp)
-    lw t1, 16(sp)
-    lw t2, 20(sp)
-    lw s0, 24(sp)
-    lw s1, 28(sp)
-    lw a0, 32(sp)
-    lw a1, 36(sp)
-    lw a2, 40(sp)
-    lw a3, 44(sp)
-    lw a4, 48(sp)
-    lw a5, 52(sp)
-    lw a6, 56(sp)
-    lw a7, 60(sp)
-    lw s2, 64(sp)
-    lw s3, 68(sp)
-    lw s4, 72(sp)
-    lw s5, 76(sp)
-    lw s6, 80(sp)
-    lw s7, 84(sp)
-    lw s8, 88(sp)
-    lw s9, 92(sp)
-    lw s10, 96(sp)
-    lw s11, 100(sp)
-    lw t3, 104(sp)
-    lw t4, 108(sp)
-    lw t5, 112(sp)
-    lw t6, 116(sp)
-    addi sp, sp, 120
+    lw ra, 0(sp)   # x1
+    lw gp, 8(sp)   # x3
+    lw tp, 12(sp)  # x4
+    lw t0, 16(sp)  # x5
+    lw t1, 20(sp)  # x6
+    lw t2, 24(sp)  # x7
+    lw s0, 28(sp)  # x8
+    lw s1, 32(sp)  # x9
+    lw a0, 36(sp)  # x10
+    lw a1, 40(sp)  # x11
+    lw a2, 44(sp)  # x12
+    lw a3, 48(sp)  # x13
+    lw a4, 52(sp)  # x14
+    lw a5, 56(sp)  # x15
+    lw a6, 60(sp)  # x16
+    lw a7, 64(sp)  # x17
+    lw s2, 68(sp)  # x18
+    lw s3, 72(sp)  # x19
+    lw s4, 76(sp)  # x20
+    lw s5, 80(sp)  # x21
+    lw s6, 84(sp)  # x22
+    lw s7, 88(sp)  # x23
+    lw s8, 92(sp)  # x24
+    lw s9, 96(sp)  # x25
+    lw s10, 100(sp) # x26
+    lw s11, 104(sp) # x27
+    lw t3, 108(sp) # x28
+    lw t4, 112(sp) # x29
+    lw t5, 116(sp) # x30
+    lw t6, 120(sp) # x31
+    addi sp, sp, 124
 .endm
 
 .global _trap_handler
@@ -111,6 +76,17 @@
 
 _trap_handler:
     save_all_registers
+    
+    # Pass the current stack pointer (sp) to trap_handler_c as an argument.
+    # The argument goes in register a0.
+    mv a0, sp
+
     call trap_handler_c
+
+    # After trap_handler_c returns, the address of the *new* task's stack
+    # will be in the return value register, a0.
+    # We now switch stacks by moving that address into sp.
+    mv sp, a0
+
     restore_all_registers
     mret

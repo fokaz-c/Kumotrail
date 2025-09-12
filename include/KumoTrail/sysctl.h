@@ -27,12 +27,6 @@
  * This module provides a centralized and abstracted API for managing the
  * clocks and reset signals of various hardware peripherals on the ESP32-C3.
  * It ensures that peripherals are properly enabled and initialized before use.
- *
- * @version 1.0
- * @date 28-08-2025
- * @author fokaz-c
- * @maintainer fokaz-c
- *
  * @note This module is essential for the proper functioning of all drivers
  * that interact with hardware peripherals.
  */

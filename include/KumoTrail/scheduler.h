@@ -30,4 +30,8 @@ int task_create(task_func_t func);
  */
 void scheduler_start(void);
 
+void enable_interrupts(void);
+
+uint32_t *schedule(uint32_t *old_sp);
+
 #endif /* KUMOTRAIL_SCHEDULER_H */
